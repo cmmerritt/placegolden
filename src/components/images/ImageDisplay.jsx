@@ -1,18 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { fetchImageByParams } from '../../services/imageService';
 
-const ImageDisplay = () => {
+const ImageDisplay = (props) => {
   const { width, height } = useParams();
-  const image = fetchImageByParams(width, height);
-  console.log(height);
-  console.log(image);
   return (
-    <>
-      Now showing image with dimensions {width} {height}
-      <object data={image.data} type="image/svg+xml">
-      </object>
-    </>
+      <>
+        Now showing image with dimensions {width} {height}
+        <img src='/{width}/{height}' alt="whatever">
+        </img>
+      </>
   )
+
 }
 
 export default ImageDisplay;
