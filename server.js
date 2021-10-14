@@ -7,36 +7,30 @@ import * as fs from 'fs';
 import images from './images/images.js';
 
 const app = express();
+const imageDir = '/public/images';
+const BASE_URL = 'localhost:5000'
 
 app.use(express.json());
 app.use(express.static('public'));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.get('/express_backend', (req, res) => {
   res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' }); 
 });
 
 app.get('/:width/:height', (req, res, next) => {
-  const { width, height } = req.params;
+  const fileOrJSImageSource = 'json';
   let imageData1 = '';
-
-  let ratio = width/height;
-
-  let getImageAttempts = 0;
-  const getImage = () => {
-    const yourImage = images[Math.floor(Math.random() * images.length)];
-    const yourImageRatio = yourImage.width/yourImage.height;
-    if((ratio < 0.8 && yourImageRatio > 1) || (ratio > 1.2 && yourImageRatio < 1)) {
-      getImageAttempts++;
-      if(getImageAttempts < 10) {
-        getImage();
-      } else {
-        return yourImage;
-      }
-    }
-  }
-
-  const image = getImage();
-  imageData1 = image.data;
+  if(fileOrJSImageSource === 'file') {
+      const files = fs.readdirSync(__dirname + imageDir);
+      const chosenFile = files[Math.floor(Math.random() * files.length)];
+      imageData1 = base64Sync(__dirname + imageDir + '/' + chosenFile)
+  } else {
+      const yourImage = images[Math.floor(Math.random() * images.length)];
+      imageData1 = yourImage.data
+  };
 
   let base64Data = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
 
