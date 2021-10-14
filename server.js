@@ -1,5 +1,4 @@
 import express from 'express';
-import {base64Sync} from 'base64-img';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -11,44 +10,52 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 app.get('/express_backend', (req, res) => {
   res.send({ express: 'YOUR EXPRESS BACKEND IS CONNECTED TO REACT' }); 
 });
 
+const currentDir = process.env.LAMBDA_TASK_ROOT || __dirname;
+
 app.get('/:width/:height', (req, res, next) => {
-  const { width, height } = req.params;
-  let imageData1 = '';
+    let { width, height } = req.params;
+    // fs.readFile(path.join(currentDir, 'images/images.json'), 'utf-8', (err, data) => {
+    //      if(err) return res.redirect('/about');
+    
+    // const images = JSON.parse(data);
+    let ratio = width/height;
 
-  let ratio = width/height;
-
-  let getImageAttempts = 0;
-  const getImage = () => {
     const yourImage = images[Math.floor(Math.random() * images.length)];
-    const yourImageRatio = yourImage.width/yourImage.height;
-    if((ratio < 0.8 && yourImageRatio > 1) || (ratio > 1.2 && yourImageRatio < 1)) {
-      getImageAttempts++;
-      if(getImageAttempts < 10) {
-        getImage();
-      } else {
-        return yourImage;
-      }
-    }
-  }
 
-  const image = getImage();
-  imageData1 = image.data;
+      // let getImageAttempts = 0;
+      // const getImage = () => {
+      //   const yourImage = images[Math.floor(Math.random() * images.length)];
+      //   console.log('yourImage', yourImage);
+      //   const yourImageRatio = yourImage.width/yourImage.height;
+  
+      //   if((ratio < 0.8 && yourImageRatio > 1) || (ratio > 1.2 && yourImageRatio < 1)) {
+      //     getImageAttempts++;
+      //     if(getImageAttempts < 10) {
+      //       getImage();
+      //     } else {
+      //       return yourImage;
+      //     }
+      //   } else {
+      //     return yourImage;
+      //   }
+      // }
+      // const image = getImage();
 
-  let base64Data = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+      console.log('image from server.js', yourImage);
 
-  const img = Buffer.from(base64Data, 'base64');
-
-  res.writeHead(200, {
-  'Content-Type': 'image/jpeg',
-  'Content-Length': img.length
-  });
-
-  res.end(img);
+      res.json(yourImage);
+  
+      // res.writeHead(200, {'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=86400'});
+      // return res.end('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="' + width + '" height="' + height + '" viewBox="0 0 ' + image.width + ' ' + image.height + '" preserveAspectRatio="xMidYMid slice"> width="' + image.width + '" height="' + image.height + ' /></svg>');
 });
+
 
 const PORT = process.env.PORT || 5000;
 
