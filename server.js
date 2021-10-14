@@ -1,5 +1,4 @@
 import express from 'express';
-import {base64Sync} from 'base64-img';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -43,6 +42,7 @@ app.get('/:width/:height', (req, res, next) => {
 
   res.end(img);
 });
+
 
 const PORT = process.env.PORT || 5000;
 
