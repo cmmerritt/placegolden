@@ -6,7 +6,8 @@ import ImagesPage from './components/images/ImagesPage';
 // import ImageDisplay from './components/images/ImageDisplay';
 import {
   Route,
-  Switch
+  Switch,
+  Redirect
 } from 'react-router-dom';
 
 const App = () => {
@@ -33,6 +34,11 @@ const App = () => {
             <ImagesPage {...routerProps} />
           )}
         />
+
+        <Route path="/api">
+          <Redirect to="/.netlify/functions/server/api" />
+        </Route>
+        
 
         {/* <Route path="/:width/:height" exact={true}
           render={routerProps => (
