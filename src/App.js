@@ -3,7 +3,7 @@ import Header from './Header';
 import HomePage from './components/home/HomePage';
 import AboutPage from './components/about/AboutPage';
 import ImagesPage from './components/images/ImagesPage';
-import ImageDisplay from './components/images/ImageDisplay';
+// import ImageDisplay from './components/images/ImageDisplay';
 import {
   Route,
   Switch
