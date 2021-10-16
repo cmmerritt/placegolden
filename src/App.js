@@ -3,7 +3,7 @@ import Header from './Header';
 import HomePage from './components/home/HomePage';
 import AboutPage from './components/about/AboutPage';
 import ImagesPage from './components/images/ImagesPage';
-// import ImageDisplay from './components/images/ImageDisplay';
+import ImageDisplay from './components/images/ImageDisplay';
 import {
   Route,
   Switch,
@@ -35,16 +35,16 @@ const App = () => {
           )}
         />
 
-        <Route path="/api/:width/:height">
+        {/* <Route path="/api/:width/:height">
           <Redirect to="/.netlify/functions/server/api/:width/:height" />
-        </Route>
+        </Route> */}
         
 
-        {/* <Route path="/:width/:height" exact={true}
+        <Route path="/api/:width/:height" exact={true}
           render={routerProps => (
             <ImageDisplay {...routerProps} />
           )}
-        /> */}
+        />
 
       </Switch>
     </>

@@ -1,15 +1,12 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Redirect } from 'react-router-dom';
 
 const ImageDisplay = (props) => {
   const { width, height } = useParams();
   return (
-      <>
-        Now showing image with dimensions {width} {height}
-        <img src='/{width}/{height}' alt="whatever">
-        </img>
-      </>
+      <Redirect to={{
+        pathname: `/.netlify/functions/server/api/${width}/${height}`
+      }} />
   )
-
 }
 
 export default ImageDisplay;
