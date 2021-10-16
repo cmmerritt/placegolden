@@ -1,11 +1,6 @@
-import express from 'express';
-import {base64Sync} from 'base64-img';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import * as fs from 'fs';
-import images from '../../images/images.js';
-import serverless from 'serverless-http';
+const serverless = require('serverless-http');
+const express = require('express');
+const images = require('../../images/images.json');
 
 const app = express();
 
@@ -20,43 +15,18 @@ app.get('/express_backend', (req, res) => {
 
 router.get('/api/:width/:height', (req, res, next) => {
   const { width, height } = req.params;
-  let imageData1 = '';
 
-  let ratio = width/height;
+  const yourImage = images[Math.floor(Math.random() * images.length)];
 
-  let getImageAttempts = 0;
-  const getImage = () => {
-    const yourImage = images[Math.floor(Math.random() * images.length)];
-    const yourImageRatio = yourImage.width/yourImage.height;
-    if((ratio < 0.8 && yourImageRatio > 1) || (ratio > 1.2 && yourImageRatio < 1)) {
-      getImageAttempts++;
-      if(getImageAttempts < 10) {
-        getImage();
-      } else {
-        return yourImage;
-      }
-    }
-  }
-
-  const image = getImage();
-  imageData1 = image.data;
-
-  let base64Data = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
-
-  const img = Buffer.from(base64Data, 'base64');
-
-  res.writeHead(200, {
-  'Content-Type': 'image/jpeg',
-  'Content-Length': img.length
-  });
-
-  res.end(img);
+  res.writeHead(200, {'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=86400'});
+  return res.end(
+      '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="'+ width + '" height="' + height +
+      '" viewBox="0 0 ' + yourImage.width + ' ' + yourImage.height +
+      '" preserveAspectRatio="xMidYMid slice"> ' +
+      '<image xlink:href="' + yourImage.data + '" width="' + yourImage.width + '" height="' + yourImage.height + '" /></svg>');
 });
 
-const PORT = process.env.PORT || 9000;
+app.use('/.netlify/functions/server', router);
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
-app.use('/.netlify/functions/generator', router);
-
+module.exports = app;
 module.exports.handler = serverless(app);
