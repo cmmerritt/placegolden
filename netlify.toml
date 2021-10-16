@@ -1,5 +1,13 @@
-	[[redirects]]
+[build]
+  functions = "functions"
+  publish = "build"
+[[redirects]]
   from = "/*"
-  to = "/.netlify/functions/generator/:splat"
+  to = "/index.html"
   status = 200
-  force = true
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    
