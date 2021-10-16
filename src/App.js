@@ -35,8 +35,8 @@ const App = () => {
           )}
         />
 
-        <Route path="/api">
-          <Redirect to="/.netlify/functions/server/api" />
+        <Route path="/api/:width/:height">
+          <Redirect to="/.netlify/functions/server/api/:width/:height" />
         </Route>
         
 
