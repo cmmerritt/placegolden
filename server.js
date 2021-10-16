@@ -24,7 +24,7 @@ router.get('/api/:width/:height', (req, res, next) => {
       '<image xlink:href="' + yourImage.data + '" width="' + yourImage.width + '" height="' + yourImage.height + '" /></svg>');
 });
 
-app.use('/.netlify/functions/server', router);
+app.use('/.netlify/functions/server/api', router);
 
 module.exports = app;
 module.exports.handler = serverless(app);
