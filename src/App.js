@@ -6,8 +6,7 @@ import ImagesPage from './components/images/ImagesPage';
 import ImageDisplay from './components/images/ImageDisplay';
 import {
   Route,
-  Switch,
-  Redirect
+  Switch
 } from 'react-router-dom';
 
 const App = () => {
